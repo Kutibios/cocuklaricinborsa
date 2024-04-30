@@ -1,4 +1,5 @@
 # ÇOCUKLAR İÇİN BORSA
+## Oynanış Videosu : https://www.youtube.com/watch?v=BzNaQnD5apI
 ## Oyunun Linki : https://kutibios.github.io/cocuklaricinborsa/ 
 
 Proje, **Çocuklar İçin Borsa** adını taşıyan bir web tabanlı oyunu içerir. Oyun, Borsa ile yeni tanışmış veya yaşı küçük olan kullanıcıların bir borsa balinası olarak rol alarak altın ve dolar ticareti yapmalarını sağlar. Kullanıcılar, karakterlerini ileri-geri ve aşağı-yukarı yön tuşlarıyla kontrol ederek etraflarındaki altın ve dolar nesnelerini toplayabilirler. Ayrıca, oyun içi butonlar aracılığıyla altın ve dolar alım satımı yapabilirler. Oyunun amacı, kullanıcıların kasalarındaki parayı artırmak ve piyasadaki en büyük balina olmak için stratejiler geliştirmelerini sağlamaktır.
