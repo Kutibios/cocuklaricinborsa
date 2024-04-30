@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>COCUKLARICINBORSA</title> 
+
+<style>
+canvas    /* bir nevi tuval koydum */
+{
+    border:1px solid gray;
+    background-color: white;
+}
+
+.button 
+{  /* lazım olursa diye gecici buton takviyesi  */
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 5px;
+}
+
+
+</style>
+</head>
+<body onload="oyunbaslangic()">  
+    
+<script>
+    //üstte oyun baslangıc fonksiyonunu çağırarak başlanır
+window.onload = function() 
+{
+    alert(" LÜTFEN OKUYUNUZ \n\n\nÇOCUKLAR İÇİN BORSA'YA HOŞGELDİNİZ! \n\n OYUNUN HİKAYESİ : Siz bir borsa balinasısınız ve yaptığınız işlemlere göre altın ve doların değerlerini onları satın aldıkça veya sattıkça değişmesine sebep oluyrsunuz. Tabi günler geçtikçe de borsadaki altın ve dolar piyasası da değişebiliyor.\n\n OYUNUN AMACI: Kasanızdaki parayı yaptığınız işlemler doğrultusunda olabildiğince yüksek tutmak. Kısacası piyasadaki en büyük BALİNA olmak. Bu kadar basit :) . Fakat 3200 tl gibi ufak bir harcama yaparak ödüle sahip olmak istiyorsanız SPACE tuşuna basmanız yeterli ")
+    alert("NASIL OYNANIR? : \nİleri-Geri ve Aşağı-Yukarı Yön tuşları ile hareket edebilir \nEtraftaki coinleri yön tuşları ile üstüne giderek toplayabilir ve para kazanabilirsiniz\nSPACE tuşu : 3200 tl harcayarak balinanızı 'GOLD EDİTİON' yapar.\nSatın Al Butonu : Satın al butonlarından birine tıklarsanız altın veya dolar alabilirsiniz\nSat Butonu : Sat butonlarından birine tıklarsanız altın veya dolar satabilirsiniz\nGün Artır Butonu: Bu butona tıklarsanız sonraki güne geçersiniz ve piyasa değerleri değişir. ")
+    oyunbaslangic();
+
+}
+  //js de kullanacağımız değişkenler
+var forkarakterresmi = "images/karakter.gif";
+var altinnesnesi = "images/gold.gif";
+var altinnesnesi2 = "images/gold2.gif";
+var karakter;
+var altinalbutonu;
+var dolaralbutonu;
+var altınbutonusat; 
+var dolarbutonusat;
+var günsayaci;
+var günbutonu;
+var dolardeger = 35;
+var altindeger = 2500;
+var kasa = 3000;
+var altinsayisi = 0;
+var dolarsayisi = 0;
+var coindizi = []; // coin dizisi
+var altinkarakter = false; // karakter altın rengine dönüp dönmediğini kontrol etmek amacıyla oluşturdum
+
+function oyunbaslangic()   //oyun için butonların şekil aldığı ve arkaplanın oluşturulduğı kısımdır
+{
+    myBackground = new component(1500, 700, "images/pixi.png", 0, 0, "image");
+    karakter = new component(150,150, "images/karakter.gif", 10, 520, "image");
+    günsayaci = new component("30px", "Fira Code", "dark gray", 10, 100, "text");
+    günbutonu = new component(100, 50, "green", 10, 10, "button");
+    
+    altinalbutonu = new component(100, 50, "#FFD700", 90, 470, "button");
+    dolaralbutonu = new component(100, 50, "#4169E1", 280, 470, "button");
+    altınbutonusat = new component(100, 50, "#FFD700", 1270, 450, "button");
+    dolarbutonusat = new component(100, 50, "#4169E1", 1030, 450, "button");
+
+    günsayaci.text = "Gün: 0";
+    
+    coindizifonk(); // coinleri oluşturan fonksiyonu çağırdım
+    
+    btuborsa.start();
+}
+
+var btuborsa = 
+{
+    canvas : document.createElement("canvas"), //backgroundu tanımlıyoruz
+    start : function() 
+    {
+        this.canvas.width = 1500;
+        this.canvas.height = 700;
+        this.context = this.canvas.getContext("2d");
+
+
+
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]); //sayfanın en başındaki görünüm için geeksforgeeks forumundan öğrendim childnodes düğümdeki çocukları temsil ediyor
+        
+        this.interval = setInterval(updateGameArea,30); //sürekli oyun alanını günceller (30 milisaniyede bir)
+
+        window.addEventListener('keydown', function (e) 
+        { //klavye tuşuna basıldığında tetiklenir
+            btuborsa.keys = (btuborsa.keys || []);
+            btuborsa.keys[e.keyCode] = (e.type == "keydown");   //keycode yardımıyla klavye parametreleri tetiklenir
+        })
+        window.addEventListener('keyup', function (e) 
+        {
+            btuborsa.keys[e.keyCode] = (e.type == "keydown");            
+        })
+
+        window.addEventListener('keydown', function (e) 
+        {
+            if (e.keyCode === 32) { // space tuşuna basılınca balinanın gold rengine dönüşmesi
+        if (kasa >= 3200 && karakter.image.src.includes(forkarakterresmi)) 
+        { // Eğer Kasa 3200 üzerinde ve karakter ilk halinde ise
+            karakter.image.src = altinnesnesi; // 3200 tl harcayarak balinayı gold balina haline getirir.
+            kasa -= 3200; // Kasayi 3200 azalt
+
+            kasaguncelleme(); //burada kasa tekrardan güncellenir. (para çıkışı olması için)
+        }
+    }
+});
+         //burada karakter yaklaşınca butonu aktif etmeyi amaçladım fakat başaramadım. Bunun yerine fare yakınlaşınca aktif olan halini yaptım
+        
+        
+        this.canvas.addEventListener('click', function (e) 
+        {
+            var mouseartı = e.clientX - btuborsa.canvas.getBoundingClientRect().left; //tıklama olayı gerekleştiğinde koordinatını belirler ona göre hareket eder
+            var mouseeksi = e.clientY - btuborsa.canvas.getBoundingClientRect().top;
+
+              //altınal veya dolaral butonuna tıklayınca  elimizdeki altın ve dolar sayısınn artması ve kasadan para eksilmesi
+            if (altinalbutonu.isInside(mouseartı, mouseeksi)) 
+            {
+                if (kasa >= altindeger) 
+                {
+                    kasa -= altindeger;
+                    altinsayisi++;
+                    kasaguncelleme();
+                } else 
+                {
+                    alert("Bunu alacak bütçeniz kalmamıştır!");
+                }
+            } else if (dolaralbutonu.isInside(mouseartı, mouseeksi)) 
+            {
+                if (kasa >= dolardeger) 
+                {
+                    kasa -= dolardeger;
+                    dolarsayisi++;
+                    kasaguncelleme();
+                } else 
+                {
+                    alert("Bunu alacak bütçeniz kalmamıştır!");
+                }
+            } else if (altınbutonusat.isInside(mouseartı, mouseeksi)) 
+            {
+                //altın veya dolar satarken kasamızın bütçesinin artması ve fazla satım yapılırsa uyarı çıkaran if
+                if (altinsayisi > 0) 
+                {
+                    kasa += altindeger;
+                    altinsayisi--;
+                    kasaguncelleme();
+                } else {
+                    alert("Satılacak altın miktarı yok!");
+                }
+            } else if (dolarbutonusat.isInside(mouseartı, mouseeksi)) 
+            {
+                if (dolarsayisi > 0) 
+                {
+                    kasa += dolardeger;
+                    dolarsayisi--;
+                    kasaguncelleme();
+                } else 
+                {
+                    alert("Satılacak dolar miktarı yok!");
+                }
+            } 
+            //eğer gün artır butonuna tıklanırsa yeni bir gün için sayacı artırmakla kalınmaz 
+            //rastgele coinler tekrar oluşur ve kasa gün değiştiği için güncel kura göre değişkenlik gösterir
+            else if (günbutonu.isInside(mouseartı, mouseeksi))  
+            {
+                günsayaci.text = "Gün: " + (parseInt(günsayaci.text.split(": ")[1]) + 1);
+
+                coindizifonk(); // coinleri oluştur
+                kasaguncelleme(); // kasayi güncelle
+            }
+        })
+    }, 
+
+    clear : function()
+    {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+
+
+function kasaguncelleme() 
+{
+    var rastgeledolar = Math.random() < 0.5 ? -0.05 : 0.05; //sözde kod ile random dolar artış veya azalışı belirlenir
+    dolardeger += dolardeger * rastgeledolar;
+
+    var rastgelealtın = Math.random() < 0.5 ? -0.05 : 0.05;
+    altindeger += altindeger * rastgelealtın;
+
+    document.getElementById("dolardeger").innerText = "Dolar Değeri: TL " + dolardeger.toFixed(2); //tofixed . dan sonra 2 basamak yazdırır
+    document.getElementById("altindeger").innerText = "Altın Fiyatı: TL " + altindeger.toFixed(2);
+    document.getElementById("kasa").innerText = "Kasa:TL " + kasa.toFixed(2);
+    document.getElementById("altinsayisi").innerText = "Altın Miktarı: " + altinsayisi;
+    document.getElementById("dolarsayisi").innerText = "Dolar Miktarı: " + dolarsayisi;
+}
+
+function coindizifonk() 
+{
+    coindizi = []; //coinleri rastgele dağıtma
+    for (var i = 0; i < 5; i++) 
+    {
+        var x = Math.floor(Math.random() * 1000); // Rastgele x koordinatı
+        var y = Math.floor(Math.random() * 500); // Rastgele y koordinatı
+        coindizi.push(new component(150, 150, "images/coin.gif", x, y, "image"));
+    }
+}
+function component(width, height, color, x, y,type) { //bileşen oluşturmamıza yardımcı olan fonksiyon
+    this.type = type;
+
+    if (type == "image") {
+        this.image = new Image();
+        this.image.src = color;
+
+    } else if (type == "text") { //oluşturulan text yani yazıysa bir şey yapma
+        this.text = "";
+    }
+
+    
+    this.width = width;   //butonların ve konumlarını belirlemek için zorunludur
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;    
+    this.update = function() 
+    {
+        ctx = btuborsa.context;  //butonların rengi ve konumları x ve y koordinatlarına göre konumlandırılır.
+        if (type == "image") 
+        {
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        } 
+        else if (type == "button") 
+        {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillStyle = "white";
+            ctx.font = "17px Arial";
+            if (this == altinalbutonu) 
+            {
+                ctx.fillText("Altın Al", this.x + 12, this.y + 30);
+
+            } 
+            else if (this == dolaralbutonu) 
+            {
+                ctx.fillText("Dolar Al", this.x + 12, this.y + 30);
+
+            } 
+            else if (this == altınbutonusat) 
+            {
+                ctx.fillText("Altın Sat", this.x + 12, this.y + 30);
+
+            } 
+            else if (this == dolarbutonusat) 
+            {
+                ctx.fillText("Dolar Sat", this.x + 12, this.y + 30);
+
+            } 
+            else if (this == günbutonu) 
+            {
+                ctx.fillText("Gün Artır", this.x + 20, this.y + 30);
+            }
+        } 
+        else if (type == "text") 
+        {
+            ctx.fillStyle = color;
+            ctx.font = this.width + " " + this.height;
+            ctx.fillText(this.text, this.x, this.y);
+        } 
+        else if (type == "box") //kutudan bahsettiğim şey coindir yüksekliğini genişliğini rengini belirlemek için else if kullandım
+        { 
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.yeni = function() 
+    {
+        this.x += this.speedX;
+        this.y += this.speedY;        
+    }    
+
+    this.isInside = function(mouseartı, mouseeksi) { //burada farenin kutunun içine girip girmemesine bakar
+        return (mouseartı >= this.x && mouseartı <= this.x + this.width && mouseeksi >= this.y && mouseeksi <= this.y + this.height);
+    }
+}
+
+function updateGameArea() { //gün sonu  harita update alır.
+    btuborsa.clear();
+    myBackground.yeni();
+    myBackground.update();
+    karakter.speedX = 0;
+    karakter.speedY = 0;    
+//js key-code yardımıyla klavye tuşlar numaralandırılmıştır
+//tuşların karakteri etkileyeceği hız ve yön gibi unsurlar keycode yardımıyla tanımlandırdım
+    if (btuborsa.keys && btuborsa.keys[37]) {     //numaraya göre karakter hareketleri if koşuluyla oluşturulur
+        karakter = new component(150,150, "images/geri.gif", karakter.x, karakter.y, "image");
+        karakter.speedX = -6; 
+    }
+
+    if (btuborsa.keys && btuborsa.keys[39]) {
+        karakter = new component(150,150, "images/karakter.gif", karakter.x, karakter.y, "image");
+        karakter.speedX = 6;
+    }
+
+    if (btuborsa.keys && btuborsa.keys[38]) {karakter.speedY = -6; }
+    if (btuborsa.keys && btuborsa.keys[40]) {karakter.speedY = 6; }
+
+    karakter.yeni();    
+
+    // Coinlerin tekrardan rastgele yerleştirilmesi için açılan for döngüsü
+    for (var i = 0; i < coindizi.length; i++) {  //coinlerin günün başlangıcında tekrar rastgele oluşmasını sağlayan fonksiyon
+        coindizi[i].update();
+    }
+
+    karakter.update();     //oyun boyunca güncel kalmasını sağlayan taraf
+    altinalbutonu.update();
+    dolaralbutonu.update();
+    altınbutonusat.update();
+    dolarbutonusat.update();
+    günsayaci.update();
+    günbutonu.update();
+
+
+    //karakter coinlerin üstüne gelince para almasını sağlayan döngü diziler yardımıyla üstüne gelmesinin anlaşılmasını da sğalar
+    for (var i = 0; i < coindizi.length; i++) {
+        if (coinyut(karakter, coindizi[i])) {
+            kasa += 250; // Kasayi artır
+            coindizi.splice(i, 1);  //splice komutuyla coin yok olur
+        }
+    }
+}
+
+//bu fonksiyon ise karakterle coinin üst üste geldiğini bildiren geri bildirimli fonksiyon
+function coinyut(kerıktır, minecraftcoini) {
+    return kerıktır.x < minecraftcoini.x + minecraftcoini.width &&
+    kerıktır.x + kerıktır.width > minecraftcoini.x &&
+    kerıktır.y < minecraftcoini.y + minecraftcoini.height &&
+    kerıktır.y + kerıktır.height > minecraftcoini.y;
+}
+
+if (kasa > 3200 && !altinkarakter) {
+        karakter.image.src = "images/gold.gif"; // Karakterin resmini gold.gif olarak değiştir
+        
+
+        altinkarakter = true; // altın olarak kalmasını sağlayacak etken
+    }
+//DİPNOT: DOLAR VEYA ALTIN AL VEYA SAT YAPARKEN DE BORSA BALİNASI OLDUĞUMUZ İÇİN DEĞERLER DEĞİŞECEKTİR
+</script>
+<!-- Değerlerin gösterildiği yerler  position style ile konumlarını ayarladım çünkü bir türlü sol üste yazdıramıyordum--> 
+<p id="kasa" style="position:absolute;top:100px;left:10px;color:black;">Kasa:3000.00 TL</p>
+<p id="altindeger" style="position:absolute;top:135px;left:10px;color:black;">Altın Fiyatı: 2500.00TL</p>
+<p id="dolardeger" style="position:absolute;top:155px;left:10px;color:black;">Dolar Değeri: 35.00TL</p>
+
+<p id="altinsayisi" style="position:absolute;top:175px;left:10px;color:black;">Altın Miktarı: 0</p>
+<p id="dolarsayisi" style="position:absolute;top:195px;left:10px;color:black;">Dolar Miktarı: 0</p>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
