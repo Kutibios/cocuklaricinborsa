@@ -1,1 +1,1 @@
-# cocuklaricinborsa
+**offline!**
