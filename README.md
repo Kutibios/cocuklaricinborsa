@@ -39,18 +39,3 @@ Kasasındaki Paralarla kendini geliştirmiş bir **Golden Balina!!!**
 ![Ekran görüntüsü 2024-04-30 163927](https://github.com/Kutibios/cocuklaricinborsa/assets/168540930/067a21de-c5c9-4e91-ad13-2ef41902ce72)
 ## 
 > *Levent Kutay Sezer**
-
-
-
-
-
-
-## Oynanış
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |                   |                    
-|----------------|-------------------------------|--------
-|Yön Tuşları|Yön tuşları ile Balinayı hareket ettirebilir, coin toplayabilir ve etrafta serbestçe gezebilirsiniz        |
-|Space        |Belli bir miktar Kasadaki Parayla kendinizi havalı bir altın balina haline dönüştürebilirsiniz                        |
-|Butonlar         |Butonlara Tıklayarak Altın Alıp satabilir veya bulunduğunuz günden diğer güne geçebilirsiniz.
