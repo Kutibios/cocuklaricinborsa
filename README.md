@@ -36,6 +36,7 @@ Projemde kullandığım teknolojiler şunlardır:
 Yeni bir günün başlangıcı ve Borsayı alt üst edecek bir **Balina!!!**
 ![Ekran görüntüsü 2024-04-30 164004](https://github.com/Kutibios/cocuklaricinborsa/assets/168540930/c7d458a2-9491-4bc3-9fd4-99754758378d)
 Kasasındaki Paralarla kendini geliştirmiş bir **Golden Balina!!!**
+![Ekran görüntüsü 2024-04-30 163927](https://github.com/Kutibios/cocuklaricinborsa/assets/168540930/067a21de-c5c9-4e91-ad13-2ef41902ce72)
 ## 
 > *Levent Kutay Sezer**
 
